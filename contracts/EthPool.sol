@@ -13,6 +13,7 @@ contract EthPool is Ownable {
     struct Session {
         address[] participants;
         uint256 sessionDepositTotal;
+        uint256 sessionRewardsTotal;
         mapping(address => uint256) sessionDeposit;
         mapping(address => uint256) sessionIndex;
         mapping(address => bool) isParticipating;
@@ -43,9 +44,24 @@ contract EthPool is Ownable {
         require(sentReward, "Failed to send user rewards to the user");
     }
 
-    function addRewards(uint256 _amount) external onlyOwner {
+    function addRewards(uint256 _rewards) external onlyOwner {
         address from = msg.sender;
-        _token.transferFrom(from, address(this), _amount);
+        (bool sessionRewards) = _token.transferFrom(from, address(this), _rewards);
+        require(sessionRewards, "Failed to add rewards to session");
+        uint256 numParticipants = session[currentSession].participants.length;
+        
+        for (uint i = 0; i < numParticipants; i++) {
+            address _participant = session[currentSession].participants[i];
+            uint256 _deposit = session[currentSession].sessionDeposit[_participant];
+            uint256 _totalDeposit = session[currentSession].sessionDepositTotal;
+            uint256 _ratio = calculateRatio(_deposit, _totalDeposit);
+            uint256 _participantReward = calculateRewards(_rewards, _ratio);
+            rewards[_participant] += _participantReward;
+            removeParticipant(_participant);
+        }
+        delete session[currentSession].participants;
+        delete session[currentSession].sessionRewardsTotal; 
+        delete session[currentSession].sessionDepositTotal;
         currentSession += block.number;
     }
 
