@@ -1,0 +1,10 @@
+
+# misc
+.DS_Store
+.env
+.gitattributes
+node_modules
+package-lock.json
+client/src/contracts/.placeholder
+client/node_modules/.placeholder
+bin
