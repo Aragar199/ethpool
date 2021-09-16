@@ -5,6 +5,6 @@
 .gitattributes
 node_modules
 package-lock.json
-client/src/contracts/.placeholder
+client/src/contracts
 client/node_modules/.placeholder
 bin
