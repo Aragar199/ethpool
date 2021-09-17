@@ -9,6 +9,10 @@ contract EthPool is Ownable {
     IERC20 private _token;
 
     uint256 currentSession = block.number;
+    uint256 totalRewards;
+
+    address[] participantAddress;
+    mapping (address => uint256) participantIndex;
 
     struct Session {
         address[] participants;
@@ -42,12 +46,14 @@ contract EthPool is Ownable {
         rewards[msg.sender] = 0;
         bool sentReward = _token.transfer(msg.sender, userReward);
         require(sentReward, "Failed to send user rewards to the user");
+        removeParticipant(msg.sender);
     }
 
     function addRewards(uint256 _rewards) external onlyOwner {
         address from = msg.sender;
         (bool sessionRewards) = _token.transferFrom(from, address(this), _rewards);
         require(sessionRewards, "Failed to add rewards to session");
+        totalRewards += _rewards;
         uint256 numParticipants = session[currentSession].participants.length;
         
         for (uint i = 0; i < numParticipants; i++) {
@@ -65,12 +71,20 @@ contract EthPool is Ownable {
         currentSession += block.number;
     }
 
+    function startSession() internal {
+
+    }
+
     function addParticipant(address _addr) internal {
         if (session[currentSession].isParticipating[msg.sender]) {
+            return;
         } else {
             session[currentSession].sessionIndex[_addr] = session[currentSession].participants.length;
             session[currentSession].participants.push(_addr);
             session[currentSession].isParticipating[msg.sender] = true;
+            participantIndex[msg.sender] = participantAddress.length - 1;
+            participantAddress.push(_addr);
+            
         }
     }
 
@@ -88,6 +102,15 @@ contract EthPool is Ownable {
             delete session[currentSession].sessionIndex[_addr];
             session[currentSession].participants.pop();
         }
+    }
+
+    function removeAddress(address _addr) internal {
+        uint index = participantIndex[_addr];
+        uint lastIndex = participantAddress.length - 1;
+        address lastKey = participantAddress[lastIndex];
+        participantIndex[lastKey] = index;
+        delete participantIndex[_addr];
+        participantAddress.pop();
     }
 
     function updateSessionDeposits(address _addr, uint256 _amount) internal {
