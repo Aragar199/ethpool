@@ -8,7 +8,7 @@ contract EthPool is Ownable {
 
     IERC20 private _token;
 
-    uint256 currentSession = block.number;
+    uint256 public currentSession;
     uint256 totalRewards;
 
     address[] participantAddress;
@@ -23,15 +23,20 @@ contract EthPool is Ownable {
         mapping(address => bool) isParticipating;
     }
     
-    mapping (address => uint256) balances;
-    mapping (address => uint256) rewards;
-    mapping (uint256 => Session) session;
+    mapping (address => uint256) public balances;
+    mapping (address => uint256) public rewards;
+    mapping (uint256 => Session) public session;
 
     constructor (IERC20 token) {
         _token = token;
     }
 
+    event SuccessfulDeposit(address indexed depositer, uint256 amount);
+    event RewardAdded(address indexed rewarded, uint256 amount);
+
+
     function deposit() public payable {
+        emit SuccessfulDeposit(msg.sender, msg.value);
         balances[msg.sender] += msg.value;
         addParticipant(msg.sender);
         updateSessionDeposits(msg.sender, msg.value);
@@ -40,16 +45,19 @@ contract EthPool is Ownable {
     function withdraw() public {
         uint256 userBalance = balances[msg.sender];
         balances[msg.sender] = 0;
-        (bool sent, ) = msg.sender.call{value: userBalance}("");
-        require(sent, "Failed to send user balance back to the user");
+        payable(msg.sender).transfer(userBalance);
         uint256 userReward = rewards[msg.sender];
         rewards[msg.sender] = 0;
         bool sentReward = _token.transfer(msg.sender, userReward);
         require(sentReward, "Failed to send user rewards to the user");
         removeParticipant(msg.sender);
     }
+    
+    function currentBalance(address _addr) public view returns(uint256 balance) {
+        return _addr.balance;
+    }
 
-    function addRewards(uint256 _rewards) external onlyOwner {
+    function addRewards(uint256 _rewards) external payable onlyOwner {
         address from = msg.sender;
         (bool sessionRewards) = _token.transferFrom(from, address(this), _rewards);
         require(sessionRewards, "Failed to add rewards to session");
@@ -57,12 +65,13 @@ contract EthPool is Ownable {
         uint256 numParticipants = session[currentSession].participants.length;
         
         for (uint i = 0; i < numParticipants; i++) {
-            address _participant = session[currentSession].participants[i];
+            address _participant = session[currentSession].participants[0];
             uint256 _deposit = session[currentSession].sessionDeposit[_participant];
             uint256 _totalDeposit = session[currentSession].sessionDepositTotal;
             uint256 _ratio = calculateRatio(_deposit, _totalDeposit);
             uint256 _participantReward = calculateRewards(_rewards, _ratio);
             rewards[_participant] += _participantReward;
+            emit RewardAdded(_participant, _participantReward);
             removeParticipant(_participant);
         }
         delete session[currentSession].participants;
@@ -82,9 +91,6 @@ contract EthPool is Ownable {
             session[currentSession].sessionIndex[_addr] = session[currentSession].participants.length;
             session[currentSession].participants.push(_addr);
             session[currentSession].isParticipating[msg.sender] = true;
-            participantIndex[msg.sender] = participantAddress.length - 1;
-            participantAddress.push(_addr);
-            
         }
     }
 
