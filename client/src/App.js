@@ -6,7 +6,7 @@ import "./App.css";
 var Web3 = require("web3");
 
 class App extends Component {
-  state = { loaded: false, withdrawAddress:"0x123", userTokens: 0};
+  state = { loaded: false, withdrawAddress:"0x123", userTokens: 0, userEth: 0};
 
   constructor(props) {
     super(props)
@@ -47,7 +47,7 @@ class App extends Component {
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ loaded: true, tokenAddress: SimpleToken.networks[this.networkId].address}, this.updateUserTokens);
+      this.setState({ loaded: true, tokenAddress: SimpleToken.networks[this.networkId].address}, this.updateUserTokens, this.updateUserEth);
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -59,7 +59,13 @@ class App extends Component {
 
   updateUserTokens = async () => {
     let userTokens = await this.tokenInstance.methods.balanceOf(this.accounts[0]).call()
+    userTokens = userTokens / 10**18
     this.setState({userTokens: userTokens})
+  }
+
+  updateUserEth = async () => {
+    let userEth = await this.ethPoolInstance.balances(this.accounts[0])
+    this.setState({userEth: userEth})
   }
 
   handleChange(event) {
@@ -93,9 +99,9 @@ class App extends Component {
          You currently have: {this.state.userTokens} Simple Tokens
         </p>
         <p>
-          Try changing the value stored on <strong>line 42</strong> of App.js.
+          You have deposited: {this.state.userEth} Eth
         </p>
-        <div>The stored value is: {this.state.storageValue}</div>
+       
       </div>
     );
   }
