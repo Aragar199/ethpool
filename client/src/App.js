@@ -64,7 +64,7 @@ class App extends Component {
   }
 
   updateUserEth = async () => {
-    let userEth = await this.ethPoolInstance.balances(this.accounts[0])
+    let userEth = await this.ethPoolInstance.participantDeposit().call({from: this.accounts[0]}) 
     this.setState({userEth: userEth})
   }
 
@@ -75,6 +75,10 @@ class App extends Component {
   handleSubmit(event) {
     alert('A name was submitted: ' + this.state.value)
     event.preventDefault()
+  }
+
+  handleDeposit = async () => {
+    await this.ethPoolInstance.methods.deposit().send({from: this.accounts[0], value: 1})
   }
 
 
@@ -100,6 +104,7 @@ class App extends Component {
         </p>
         <p>
           You have deposited: {this.state.userEth} Eth
+          <button type="button" onClick={this.handleDeposit} >Deposit Eth</button>
         </p>
        
       </div>
