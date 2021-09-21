@@ -19,9 +19,7 @@ contract("EthPool Test", async(accounts) => {
         let tokenInstance = await Token.deployed()
         let ethPoolInstance = await EthPool.deployed()
         let tokenValue = new BN(5)
-        // await ethPoolInstance.deposit({from: participant, value: web3.utils.toWei("1", "wei")})
-        // await ethPoolInstance.deposit({from: anotherAccount, value: web3.utils.toWei("3", "wei")})
-        let tokensAllowed = await tokenInstance.increaseAllowance(ethPoolInstance.address, tokenValue, {from: deployerAccount})
+        await tokenInstance.increaseAllowance(ethPoolInstance.address, tokenValue, {from: deployerAccount})
         await ethPoolInstance.addRewards(tokenValue, {from: deployerAccount})
         return expect(tokenInstance.balanceOf(ethPoolInstance.address)).to.eventually.be.a.bignumber.equal(tokenValue)
     })
@@ -31,7 +29,16 @@ contract("EthPool Test", async(accounts) => {
         await instance.deposit({from: participant, value: web3.utils.toWei("1", "wei")})
         expect(instance.deposit({from: participant, value: web3.utils.toWei("1", "wei")})).to.be.fulfilled
         let currentBalance = await web3.eth.getBalance(instance.address)
-        return expect(currentBalance).to.equal('1')
+        expect(currentBalance).to.be.a.bignumber.equal(new BN('1'))
+    })
+
+    it("anotherAccount should have zero balance, rewards", async () => {
+        let tokenInstance = await Token.deployed()
+        let ethPoolInstance = await EthPool.deployed()
+        let reward = await ethPoolInstance.participantReward(anotherAccount)
+        let deposit = await ethPoolInstance.participantDeposit(anotherAccount)
+        expect(reward).to.be.a.bignumber.equal(new BN(0))
+        return expect(deposit).to.be.a.bignumber.equal(new BN(0))
     })
 
     
