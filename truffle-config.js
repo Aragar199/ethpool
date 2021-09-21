@@ -1,6 +1,6 @@
 const path = require("path");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-require("dotenv").config({path: "./.env"});
+require("dotenv").config({path: require('find-config')('.env') });
 const AccountIndex = 0;
 
 module.exports = {
@@ -8,7 +8,7 @@ module.exports = {
   // to customize your Truffle configuration!
   contracts_build_directory: path.join(__dirname, "client/src/contracts"),
   networks: {
-    develop: {
+    development: {
       port: 8545,
       host: "127.0.0.1",
       network_id: "*"
@@ -17,7 +17,7 @@ module.exports = {
       provider: function() {
         return new HDWalletProvider(process.env.MNEMONIC, "http://127.0.0.1:7545", AccountIndex)
       },
-      network_id: "5777"
+      network_id: "*"
     },
     goerli_infura: {
       provider: function() {
