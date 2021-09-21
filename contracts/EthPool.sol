@@ -61,6 +61,7 @@ contract EthPool is Ownable {
     * @notice EthPool method to withdraw participant funds and rewards
     */
     function withdraw() public {
+        require(participantDeposit[msg.sender] > 0, "No funds to withdraw");
         uint userDeposit = participantDeposit[msg.sender];
         participantDeposit[msg.sender] = 0;
         payable(msg.sender).transfer(userDeposit);
