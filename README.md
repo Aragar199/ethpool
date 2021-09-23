@@ -27,7 +27,8 @@ Contract is deployed using truffle / infura to ropsten test net.
 
 ### Interact with the contract
 1. Via Script:
-  ```truffle exec script.js --network=ropsten_infura
+  ```
+  truffle exec script.js --network=ropsten_infura
   ```
 2. Via React Frontend:
    - Built using react truffle box, deployment instructions in client/README.md
