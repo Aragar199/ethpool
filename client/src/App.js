@@ -6,7 +6,7 @@ import "./App.css";
 var Web3 = require("web3");
 
 class App extends Component {
-  state = { loaded: false, withdrawAddress:"0x123", userTokens: 0, userEth: 0};
+  state = { loaded: false, withdrawAddress:"0x123", userTokens: 0};
 
   constructor(props) {
     super(props)
@@ -47,7 +47,7 @@ class App extends Component {
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ loaded: true, tokenAddress: SimpleToken.networks[this.networkId].address}, this.updateUserTokens, this.updateUserEth);
+      this.setState({ loaded: true, tokenAddress: SimpleToken.networks[this.networkId].address}, this.updateUserTokens);
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -59,13 +59,7 @@ class App extends Component {
 
   updateUserTokens = async () => {
     let userTokens = await this.tokenInstance.methods.balanceOf(this.accounts[0]).call()
-    userTokens = userTokens / 10**18
     this.setState({userTokens: userTokens})
-  }
-
-  updateUserEth = async () => {
-    let userEth = await this.ethPoolInstance.participantDeposit().call({from: this.accounts[0]}) 
-    this.setState({userEth: userEth})
   }
 
   handleChange(event) {
@@ -81,6 +75,18 @@ class App extends Component {
     await this.ethPoolInstance.methods.deposit().send({from: this.accounts[0], value: 1})
   }
 
+  handleRewards = async () => {
+    let rewards = 200
+    await this.ethPoolInstance.methods.addRewards(rewards).send({from: this.accounts[0]})
+  }
+
+  handleAwards = async () => {
+    await this.tokenInstance.methods.increaseAllowance(EthPool.networks[this.networkId].address, 200).send({from: this.accounts[0]})
+  }
+
+  handleWithdraw = async () => {
+    await this.ethPoolInstance.methods.withdraw().send({from: this.accounts[0]})
+  }
 
   render() {
     if (!this.state.loaded) {
@@ -90,22 +96,22 @@ class App extends Component {
       <div className="App">
         <h1>Stake ETH for Rewards Now!</h1>
         <p>Stake your ETH today!</p>
-        <h2>Withdraw</h2>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Address to withdraw:           
-            <input type="text" name="withdrawAddress" value={this.state.withdrawAddress} onChange={this.handleChange}/>
-            </label>
-
-          </form>
-        
         <p>
          You currently have: {this.state.userTokens} Simple Tokens
         </p>
         <p>
-          You have deposited: {this.state.userEth} Eth
-          <button type="button" onClick={this.handleDeposit} >Deposit Eth</button>
+        <button type="button" onClick={this.handleDeposit} >Deposit Eth</button>
         </p>
+        <p>
+        <button type="button" onClick={this.handleWithdraw} >Withdraw Rewards and Eth</button> 
+        </p>
+        <p>
+        <button type="button" onClick={this.handleRewards} >Owner Only: Add Rewards</button>
+        </p>
+        <p>
+        <button type="button" onClick={this.handleAwards} >Owner Only: Increase Allowance</button> 
+        </p>
+        
        
       </div>
     );
