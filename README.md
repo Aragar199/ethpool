@@ -26,9 +26,13 @@ Contract is deployed using truffle / infura to ropsten test net.
 - https://ropsten.etherscan.io/address/0x23Ac0564B72b5429dC6CF13F5bb3e8A278b3A844
 
 ### Interact with the contract
-- Built using react truffle box, deployment instructions in client/README.md
-- Click on deposit button to deposit one wei to the contract
-- Adding rewards is restricted to owner, increasing allowance and adding rewards will not work
+1. Via Script:
+  ```truffle exec script.js --network=ropsten_infura
+  ```
+2. Via React Frontend:
+   - Built using react truffle box, deployment instructions in client/README.md
+   - Click on deposit button to deposit one wei to the contract
+   - Adding rewards is restricted to owner, increasing allowance and adding rewards will not work
 
 ### Create a subgraph
 - Subgraph repo - https://github.com/Aragar199/pool
