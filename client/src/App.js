@@ -58,7 +58,7 @@ class App extends Component {
   };
 
   updateUserTokens = async () => {
-    let userTokens = await this.tokenInstance.methods.balanceOf(this.accounts[0]).call()
+    const userTokens = await this.tokenInstance.methods.balanceOf(this.accounts[0]).call()
     this.setState({userTokens: userTokens})
   }
 
@@ -76,7 +76,7 @@ class App extends Component {
   }
 
   handleRewards = async () => {
-    let rewards = 200
+    const rewards = 200
     await this.ethPoolInstance.methods.addRewards(rewards).send({from: this.accounts[0]})
   }
 
