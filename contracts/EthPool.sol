@@ -64,7 +64,8 @@ contract EthPool is Ownable {
         require(participantDeposit[msg.sender] > 0, "No funds to withdraw");
         uint userDeposit = participantDeposit[msg.sender];
         participantDeposit[msg.sender] = 0;
-        payable(msg.sender).transfer(userDeposit);
+        (bool sent, bytes memory data) = payable(msg.sender).call{value: userDeposit}("");
+        require(sent, "Failed to send Ether");
         uint userReward = participantReward[msg.sender];
         participantReward[msg.sender] = 0;
         bool sentReward = _token.transfer(msg.sender, userReward);
