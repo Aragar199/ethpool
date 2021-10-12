@@ -36,5 +36,11 @@ module.exports = {
     solc: {
       version: "^0.8.7"
     }
+  },
+  plugins: [
+    'truffle-plugin-verify'
+  ],
+  api_keys: {
+    etherscan: process.env.MY_API_KEY
   }
 };
