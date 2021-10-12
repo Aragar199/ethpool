@@ -128,11 +128,21 @@ contract EthPool is Ownable {
     }
 
     /**
+    * @notice EthPool method to check current ratio externally
+    * @param _addr address to check if deposited funds will get rewards when added
+    */
+
+    function currentRatio(address _addr) external view returns (uint256) {
+        require (participant[_addr].isParticipant == true, "Not a participating address");
+        return calculateRatio(participantDeposit[_addr], address(this).balance);
+    }
+
+    /**
     * @notice EthPool method to calculate percentage of funds in pool
     * @param _deposit funds to be calculated
     * @param _totalDeposit current total funds in the pool
     */
-    function calculateRatio(uint256 _deposit, uint256 _totalDeposit) internal view returns(uint256 ratio) {
+    function calculateRatio(uint256 _deposit, uint256 _totalDeposit) internal pure returns(uint256 ratio) {
         ratio = (_deposit * 100) / _totalDeposit;
     }
 
@@ -141,7 +151,7 @@ contract EthPool is Ownable {
     * @param _rewards total rewards to be distributed
     * @param _ratio percentage of total rewards to be calculated
     */
-    function calculateRewards(uint256 _rewards, uint256 _ratio) internal view returns(uint256 participantRewards) {
+    function calculateRewards(uint256 _rewards, uint256 _ratio) internal pure returns(uint256 participantRewards) {
         participantRewards = (_rewards * _ratio) / 100;
     }
 }
