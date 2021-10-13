@@ -21,6 +21,9 @@ contract EthPool is Ownable {
     // Current total tokens added to the contract as rewards
     uint256 totalRewards;
 
+    // Precision
+    uint256 e18 = 18;
+
     // Participant flag and index in participants
     struct Participant {
         bool isParticipant;
@@ -142,8 +145,8 @@ contract EthPool is Ownable {
     * @param _deposit funds to be calculated
     * @param _totalDeposit current total funds in the pool
     */
-    function calculateRatio(uint256 _deposit, uint256 _totalDeposit) internal pure returns(uint256 ratio) {
-        ratio = (_deposit * 100) / _totalDeposit;
+    function calculateRatio(uint256 _deposit, uint256 _totalDeposit) internal view returns(uint256 ratio) {
+        ratio = (_deposit * (10 ** e18)) / _totalDeposit;
     }
 
     /**
@@ -151,7 +154,7 @@ contract EthPool is Ownable {
     * @param _rewards total rewards to be distributed
     * @param _ratio percentage of total rewards to be calculated
     */
-    function calculateRewards(uint256 _rewards, uint256 _ratio) internal pure returns(uint256 participantRewards) {
-        participantRewards = (_rewards * _ratio) / 100;
+    function calculateRewards(uint256 _rewards, uint256 _ratio) internal view returns(uint256 participantRewards) {
+        participantRewards = (_rewards * _ratio) / (10 ** e18);
     }
 }
