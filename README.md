@@ -22,9 +22,6 @@ Example:
 ### Deploy your contract
 Contract is deployed using truffle / infura to ropsten test net.
 
-### Verify the contract in Etherscan
-- https://ropsten.etherscan.io/address/0x23Ac0564B72b5429dC6CF13F5bb3e8A278b3A844
-
 ### Interact with the contract
 1. Via Script:
   ```
