@@ -28,7 +28,11 @@ Rewards Pool provides a service where people can deposit ETH and they will recei
 ```
 npm install -g truffle
 ```
-2. Run Truffle Test Suite
+2. Install Dependencies
+```
+npm install
+```
+3. Run Truffle Test Suite
 ```
 truffle test
 ```
