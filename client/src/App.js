@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import SimpleToken from "./contracts/SimpleToken.json";
-import EthPool from "./contracts/EthPool.json";
+import RewardsPool from "./contracts/RewardsPool.json";
 import detectEthereumProvider from '@metamask/detect-provider';
 import "./App.css";
 var Web3 = require("web3");
@@ -39,10 +39,10 @@ class App extends Component {
         SimpleToken.networks[this.networkId] &&
         SimpleToken.networks[this.networkId].address,
       );
-      this.ethPoolInstance = new this.web3.eth.Contract(
-        EthPool.abi,
-        EthPool.networks[this.networkId] &&
-        EthPool.networks[this.networkId].address,
+      this.RewardsPoolInstance = new this.web3.eth.Contract(
+        RewardsPool.abi,
+        RewardsPool.networks[this.networkId] &&
+        RewardsPool.networks[this.networkId].address,
       );
 
       // Set web3, accounts, and contract to the state, and then proceed with an
@@ -72,20 +72,20 @@ class App extends Component {
   }
 
   handleDeposit = async () => {
-    await this.ethPoolInstance.methods.deposit().send({from: this.accounts[0], value: 1})
+    await this.RewardsPoolInstance.methods.deposit().send({from: this.accounts[0], value: 1})
   }
 
   handleRewards = async () => {
     const rewards = 200
-    await this.ethPoolInstance.methods.addRewards(rewards).send({from: this.accounts[0]})
+    await this.RewardsPoolInstance.methods.addRewards(rewards).send({from: this.accounts[0]})
   }
 
   handleAwards = async () => {
-    await this.tokenInstance.methods.increaseAllowance(EthPool.networks[this.networkId].address, 200).send({from: this.accounts[0]})
+    await this.tokenInstance.methods.increaseAllowance(RewardsPool.networks[this.networkId].address, 200).send({from: this.accounts[0]})
   }
 
   handleWithdraw = async () => {
-    await this.ethPoolInstance.methods.withdraw().send({from: this.accounts[0]})
+    await this.RewardsPoolInstance.methods.withdraw().send({from: this.accounts[0]})
   }
 
   render() {

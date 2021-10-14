@@ -6,11 +6,11 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 
 /**
-* @title EthPool Contract
+* @title RewardsPool Contract
 * @author alexponce.eth
 * @notice A contract that allows user to farm SimpleToken rewards based on contributions to the pool
  */
-contract EthPool is Ownable {
+contract RewardsPool is Ownable {
 
     // SimpleToken interface
     IERC20 private _token;
@@ -39,12 +39,12 @@ contract EthPool is Ownable {
     // rewards participant will receive when they withdraw
     mapping(address => uint256) public participantReward;
 
-    // EthPool SimpleToken
+    // RewardsPool SimpleToken
     constructor (IERC20 token) {
         _token = token;        
     }
 
-    // EthPool Events
+    // RewardsPool Events
     event DepositAdded(address indexed _to, uint256 _deposit);
     event RewardAdded(address indexed _to, uint256 _reward);
     event ParticipantAdded(address indexed _participating);
@@ -52,7 +52,7 @@ contract EthPool is Ownable {
 
 
     /**
-    * @notice EthPool method to deposit funds to the pool
+    * @notice RewardsPool method to deposit funds to the pool
     */
     function deposit() public payable {
         addParticipant(msg.sender);
@@ -61,7 +61,7 @@ contract EthPool is Ownable {
     }
 
     /**
-    * @notice EthPool method to withdraw participant funds and rewards
+    * @notice RewardsPool method to withdraw participant funds and rewards
     */
     function withdraw() public {
         require(participantDeposit[msg.sender] > 0, "No funds to withdraw");
@@ -77,8 +77,8 @@ contract EthPool is Ownable {
     }
 
     /**
-    * @notice EthPool method to add SimpleToken rewards to the pool
-    * @param _rewards to be added to EthPool Contract
+    * @notice RewardsPool method to add SimpleToken rewards to the pool
+    * @param _rewards to be added to RewardsPool Contract
     */
     function addRewards(uint256 _rewards) external payable onlyOwner{
         address from = msg.sender;
@@ -96,7 +96,7 @@ contract EthPool is Ownable {
     }
     
     /**
-    * @notice EthPool method to track participating address in the pool
+    * @notice RewardsPool method to track participating address in the pool
     * @param _addr of participant to be added if not participating
     */
     function addParticipant(address _addr) internal {
@@ -112,7 +112,7 @@ contract EthPool is Ownable {
     }
 
     /**
-    * @notice EthPool method to remove participant from pool
+    * @notice RewardsPool method to remove participant from pool
     * @param _addr of participant to be removed if participating
     */
     function removeParticipant(address _addr) internal {
@@ -131,7 +131,7 @@ contract EthPool is Ownable {
     }
 
     /**
-    * @notice EthPool method to check current ratio externally
+    * @notice RewardsPool method to check current ratio externally
     * @param _addr address to check if deposited funds will get rewards when added
     */
 
@@ -141,7 +141,7 @@ contract EthPool is Ownable {
     }
 
     /**
-    * @notice EthPool method to calculate percentage of funds in pool
+    * @notice RewardsPool method to calculate percentage of funds in pool
     * @param _deposit funds to be calculated
     * @param _totalDeposit current total funds in the pool
     */
@@ -150,7 +150,7 @@ contract EthPool is Ownable {
     }
 
     /**
-    * @notice EthPool method to calculate rewards based on percentage
+    * @notice RewardsPool method to calculate rewards based on percentage
     * @param _rewards total rewards to be distributed
     * @param _ratio percentage of total rewards to be calculated
     */
