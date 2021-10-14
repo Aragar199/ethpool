@@ -13,6 +13,7 @@ Rewards Pool provides a service where people can deposit ETH and they will recei
 - Share of rewards is determined by the total of participant deposited funds relative to the total amount of deposited funds at the time of rewards added.
 - The total of deposited funds rolls over after rewards are added and allocated to each participant. If **A** deposits 100 then rewards are added, **A** still has deposited 100 total until **A** withdraws from participating.
 - Any participant is considered participating as long as they have deposited funds to the pooled funds and have not withdrawn. They are allowed to rejoin at any time.
+- Rewards added but not assigned to a participant will roll over and be added to the next add reward event.
 #### Example:
 
 > Let say we have user **A** and **B** and team **T**.
@@ -32,7 +33,11 @@ npm install -g truffle
 ```
 npm install
 ```
-3. Run Truffle Test Suite
+3. Deploy contracts
+```
+truffle migrate
+```
+4. Run Truffle Test Suite
 ```
 truffle test
 ```
