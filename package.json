@@ -1,0 +1,30 @@
+{
+  "name": "rewardspool",
+  "version": "1.0.0",
+  "description": "Rewards Pool provides a service where people can deposit ETH and they will receive rewards in the form of ERC20 tokens. Users are be able to take out their deposits along with their portion of ERC20 rewards at any time. New ERC20 rewards are deposited manually into the pool by the contract owner using a contract function.",
+  "main": "script.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aragar199/rewardspool.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aragar199/rewardspool/issues"
+  },
+  "homepage": "https://github.com/Aragar199/rewardspool#readme",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.3.2",
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
+    "chai-bn": "^0.3.0",
+    "dotenv": "^10.0.0",
+    "find-config": "^1.0.0"
+  }
+}
