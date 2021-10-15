@@ -1,9 +1,9 @@
 # Rewards Pool
 ## Description
 
-Rewards Pool provides a service where people can deposit ETH and they will receive rewards in the form of ERC20 tokens. Users are be able to take out their deposits along with their portion of ERC20 rewards at any time. New ERC20 rewards are deposited manually into the pool by the contract owner using a contract function.
+Rewards Pool provides a service where people can deposit ETH and they will receive rewards in the form of an ERC20 token (SimpleToken). Users are be able to take out their deposits along with their portion of ERC20 rewards at any time. New ERC20 rewards are deposited manually into the pool by the contract owner using a contract function.
 
-#### FAQ:
+#### Summary:
 
 - Users who deposit funds to the RewardsPool contract are referred to as `participants`
 - Only the RewardsPool owner can add rewards.
@@ -49,7 +49,5 @@ Via React Frontend:
    - Click on deposit button to deposit one wei to the contract
    - Adding rewards is restricted to owner, increasing allowance and adding rewards will not work
 
-### Create a subgraph
-- Subgraph repo - https://github.com/Aragar199/pool
-- Subgraph link - https://thegraph.com/legacy-explorer/subgraph/aragar199/pool
+
 
