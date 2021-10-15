@@ -3,7 +3,7 @@
 
 Rewards Pool provides a service where people can deposit ETH and they will receive rewards in the form of ERC20 tokens. Users are be able to take out their deposits along with their portion of ERC20 rewards at any time. New ERC20 rewards are deposited manually into the pool by the contract owner using a contract function.
 
-#### FAQ
+#### FAQ:
 
 - Users who deposit funds to the RewardsPool contract are referred to as `participants`
 - Only the RewardsPool owner can add rewards.
@@ -33,21 +33,18 @@ npm install -g truffle
 ```
 npm install
 ```
-3. Deploy contracts
+3. Start [Ganache](https://www.npmjs.com/package/ganache-cli)
 ```
-truffle migrate
+ganache-cli --port 8545
 ```
-4. Run Truffle Test Suite
+1. Run Truffle Test Suite
 ```
 truffle test
 ```
 
 ### Interact with the contract
-1. Via Script:
-  ```
-  truffle exec script.js --network=ropsten_infura
-  ```
-2. Via React Frontend:
+
+Via React Frontend:
    - Built using react truffle box, deployment instructions in client/README.md
    - Click on deposit button to deposit one wei to the contract
    - Adding rewards is restricted to owner, increasing allowance and adding rewards will not work
